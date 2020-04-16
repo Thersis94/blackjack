@@ -79,27 +79,14 @@ public class Blackjack {
 	 */
 	private void startGame() {
 		
-		
-		//Find a better way to handle this!
+		//If there are no players create a new player
 		if(numOfPlayers == 0) {
-			Player newPlayer = new Player();
-			String newPlayerName = ui.display(messages.returnMessage("newPlayer"), true);
-			newPlayer.setUserName(newPlayerName);
-			numOfPlayers++;
-			playerMap.put(numOfPlayers, newPlayer);
+			addNewPlayer();
 		}
 		
-		while(true) {
-			String playerResponse = ui.display(messages.returnMessage("newPlayerOption"), true);
-			if(playerResponse.equalsIgnoreCase("yes")) {
-				Player newPlayer = new Player();
-				String newPlayerName = ui.display(messages.returnMessage("newPlayer"), true);
-				newPlayer.setUserName(newPlayerName);
-				numOfPlayers++;
-				playerMap.put(numOfPlayers, newPlayer);
-			} if(playerResponse.equalsIgnoreCase("no")) {
-				break;
-			}
+		//prompt the user to ask if they would like to create a new user
+		while(ui.display(messages.returnMessage("newPlayerOption"), true).equalsIgnoreCase("yes")) {
+			addNewPlayer();
 		}
 		
 		//Create a new deck
@@ -107,10 +94,22 @@ public class Blackjack {
 		
 		//Shuffle the deck
 		deck.shuffleDeck();
-
+		
+		
+		//Deal cards
+		for(int i=playerMap.size()-1;i>=0;i--) {
+			//If the player doesn't have two cards then deal two cards
+			while(playerMap.get(i).numOfCardsInHand()<2) {
+				playerMap.get(i).drawCard(deck.dealCard());
+			}
+		}
+		
 		//Run the game play logic for each player
+		//Iterate through player map
 		playGame();
-
+		
+		//handle dealer game play
+		
 //		for(each player in player[]) {
 //			//Check to see who won each game
 //			calculateWinner();
@@ -123,46 +122,54 @@ public class Blackjack {
 	
 	private void playGame() {
 		
-		
 		for(int i=playerMap.size()-1;i>0;i--) {
-			while(playerMap.get(i).numOfCardsInHand()<2) {
-				playerMap.get(i).drawCard(deck.dealCard());
-				System.out.println(playerMap.get(i).getUserName());
-				System.out.println(playerMap.get(i).listOfCardLabelsInHand());//setup a way to view the cards in a players hand
+				
+			while(true) {
+				//If the player isn't showing all of their cards then show them all
+				ui.display(playerMap.get(i).getUserName() + messages.returnMessage("youHaveBeenDealt") + playerMap.get(i).listOfCardLabelsInHand(), false);
+				
+				//Show the dealers first card
+				ui.display(messages.returnMessage("dealersFirstCard") + playerMap.get(0).dealersFirstCard() , false);
+				
+				//Prompt player to select an action
+				String playerInput = ui.display(messages.returnMessage("playerGameChoice"), true);
+				
+				if(playerInput.equalsIgnoreCase("raise")) {
+					
+					//Display the account information for the current player
+					ui.display(messages.returnMessage("bankBalance") + playerMap.get(i).getAccountInfo() + " chips.", false);
+					
+					//Send message with account balance and save the amount the player would like top bet
+					int amountToIncreaseBet = Integer.parseInt(ui.display(messages.returnMessage("betAmount"), true));
+					
+					//If the amount they would like to bet is more than they have then display an error
+					if(amountToIncreaseBet > playerMap.get(i).getAccountInfo()) {
+						ui.display(messages.returnMessage("notEnoughFunds"), false);
+					} else {
+						
+						//Increase the bet amount
+						playerMap.get(i).increaseBet(amountToIncreaseBet);
+						
+						//Display current account balance
+						ui.display(messages.returnMessage("bankBalance") + playerMap.get(i).getAccountInfo() + " chips.", false);
+						
+						//Display current pot balance
+						ui.display(messages.returnMessage("currentValueOfPot") + playerMap.get(i).valueOfPot(), false);
+					}
+					
+				} else if(playerInput.equalsIgnoreCase("hit")) {
+					
+					//Player is dealt another card
+					playerMap.get(i).drawCard(deck.dealCard());
+					
+				} else if(playerInput.equalsIgnoreCase("stay")) {
+					break;
+				} else {
+					ui.display(messages.returnMessage("errorInputNotFound"), false);
+				}
+				//Check for Bust
 			}
 		}
-//		
-//		//Deal the cards to all of the players
-//		dealCards();
-//		
-//		//If the player isn't showing all of their cards then show them all
-//		player[playerNum].displayCards();
-//		
-//		//Prompt player to select an action
-//		
-//		//Possible options for the player to choose
-//		while(true) {
-//			if(raiseBet) {
-//				
-//				//transfer chips from player account to pot
-//				increaseBet();
-//				
-//			} else if(hit) {
-//				
-//				//Run the hit method
-//				hit();
-//				
-//			} else if(stay) {
-//				
-//				//Run the stay method
-//				break;
-//				
-//			} else {
-//				
-//				//Run an error
-//				
-//			}
-//		}
 	}
 	
 	
@@ -179,7 +186,6 @@ public class Blackjack {
 		
 		
 		//Transfer the value of the pot to the winner
-		
 		
 		
 		transferPotToWinner();
@@ -200,11 +206,12 @@ public class Blackjack {
 	
 	private void addNewPlayer() {
 		
-		//Create new player instance
-		
-		//Set new users username
-		
-		//add the new user instance to the player array
+		Player newPlayer = new Player();
+		String newPlayerName = ui.display(messages.returnMessage("newPlayer"), true);
+		newPlayer.setUserName(newPlayerName);
+		//add starting bet
+		numOfPlayers++;
+		playerMap.put(numOfPlayers, newPlayer);
 		
 	}
 }

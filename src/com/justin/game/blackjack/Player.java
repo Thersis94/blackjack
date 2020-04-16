@@ -16,6 +16,7 @@ public class Player {
 	private int account = 100;
 	private String userName;
 	private Hand hand = new Hand();
+	private Pot pot = new Pot();
 	
 	/** 
 	 * Method to set a new players userName
@@ -42,10 +43,12 @@ public class Player {
 	}
 	
 	
-	public void increaseBet() {
+	public void increaseBet(int amountToBet) {
 		
-		//transfer chips from player account to the pot
-		
+		//remove chips from account
+		account = account - amountToBet;
+		//add chips to pot
+		pot.increaseTotal(amountToBet);
 	}
 	
 	
@@ -90,7 +93,6 @@ public class Player {
 	public int numOfCardsInHand() {
 		
 		//Return the number of cards in the stored in the hand object
-		System.out.println("numOfCardsInHand Player Object");
 		return hand.numOfCardsInHand();
 	}
 	
@@ -98,4 +100,13 @@ public class Player {
 	public String listOfCardLabelsInHand() {
 		return hand.displayCards();
 	}
+	
+	public String dealersFirstCard() {
+		return hand.displayCard();
+	}
+	
+	public int valueOfPot() {
+		return pot.totalChips;
+	}
+	
 }

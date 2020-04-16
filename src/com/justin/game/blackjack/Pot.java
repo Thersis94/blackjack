@@ -30,8 +30,12 @@ public class Pot {
 	
 	public void increaseTotal(int potIncrease) {
 		
-		//Set totalChips to the original value plus the recieved value
-		totalChips = totalChips + potIncrease;
+		//Set totalChips to the original value plus the received value
+		totalChips = totalChips + (potIncrease*2);
+	}
+	
+	public int totalPot() {
+		return totalChips;
 	}
 	
 	

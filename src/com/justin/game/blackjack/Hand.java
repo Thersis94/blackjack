@@ -18,11 +18,21 @@ public class Hand {
 	
 	private ArrayList<Card> hand = new ArrayList<Card>();
 	
+	
+	public String displayCard() {
+		String cardLabel = hand.get(0).returnInfoString();
+		return cardLabel;
+	}
+	
 	public String displayCards() {
-		String cardLabelList = hand.get(0).returnlabel();
+		String cardLabelList = hand.get(0).returnInfoString();
 		//Return a list of the Card Labels that are in the players hand
 		for(int i=1;i<hand.size();i++) {
-			cardLabelList = cardLabelList + ", " + hand.get(i).returnlabel();
+			if(i+1 == hand.size()) {
+				cardLabelList = cardLabelList + ", and a " + hand.get(i).returnInfoString();
+			} else {
+				cardLabelList = cardLabelList + ", " + hand.get(i).returnInfoString();
+			}
 		}
 		return cardLabelList;
 	}
@@ -35,7 +45,6 @@ public class Hand {
 	}
 	
 	public int numOfCardsInHand() {
-		System.out.println("numOfCardsInHand Hand Object");
 		return hand.size();
 	}
 	

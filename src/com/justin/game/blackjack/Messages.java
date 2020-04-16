@@ -25,8 +25,16 @@ public class Messages {
 	public void setGameMessages() {
 		
 		messages.put("tempMessage", "Hello, this is a test message.");
-		messages.put("newPlayerOption", "Would you like to add another player to the game?");
+		messages.put("newPlayerOption", "Would you like to add another player to the game? 'yes' or 'no'.");
 		messages.put("newPlayer", "Please enter your name");
+		messages.put("youHaveBeenDealt", " you have been dealt a ");
+		messages.put("dealersFirstCard", "The dealer is showing a ");
+		messages.put("playerGameChoice", "Would you like to 'raise', 'hit' or 'stay'?");
+		messages.put("errorInputNotFound", "I'm sorry but we have no options that match your input. Please try again.");
+		messages.put("bankBalance", "You currently have ");
+		messages.put("betAmount", "How much would you like to bet?");
+		messages.put("notEnoughFunds", "You do not have enough chips to place that bet.");
+		messages.put("currentValueOfPot", "The current value of the pot is now ");
 	}
 	
 	/**
