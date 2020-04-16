@@ -1,3 +1,6 @@
+# Ignore bin files/folders
+bin/
+
 # Compiled class file
 *.class
 
