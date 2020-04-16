@@ -70,9 +70,9 @@ public class Deck {
 				}
 			}
 		}
-		
-		
-		
-		
+	}
+	
+	public void addCardToDeck(Card cardToAdd) {
+		deck.add(cardToAdd);
 	}
 }

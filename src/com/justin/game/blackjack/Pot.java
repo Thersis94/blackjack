@@ -16,7 +16,7 @@ public class Pot {
 	int totalChips;
 	
 	
-	public int payWinner() {
+	public int playerWon() {
 		
 		//Save the value of totalChips in pot
 		int payout = totalChips;
@@ -27,6 +27,24 @@ public class Pot {
 		//Return the original value
 		return payout;
 	}
+	
+	public int playerTied() {
+		
+		//Split total in half
+		int payout = totalChips/2;
+		
+		//Reset the totalChips to 0
+		totalChips = 0;
+		
+		//Return the payout to the player
+		return payout;
+	}
+	
+	public void playerLost() {
+		totalChips = 0;
+	}
+	
+	
 	
 	public void increaseTotal(int potIncrease) {
 		

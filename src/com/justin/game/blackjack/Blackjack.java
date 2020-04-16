@@ -20,6 +20,7 @@ public class Blackjack {
 	
 	private int numOfPlayers = 0;
 	private Messages messages = new Messages();
+	private int minimumBet = 10;
 	Deck deck = new Deck();
 	UserInterface ui = new UserInterface();
 
@@ -95,113 +96,135 @@ public class Blackjack {
 		//Shuffle the deck
 		deck.shuffleDeck();
 		
-		
 		//Deal cards
 		for(int i=playerMap.size()-1;i>=0;i--) {
 			//If the player doesn't have two cards then deal two cards
 			while(playerMap.get(i).numOfCardsInHand()<2) {
 				playerMap.get(i).drawCard(deck.dealCard());
 			}
+			
+			//Place minimum bet
+			playerMap.get(i).increaseBet(minimumBet);
 		}
 		
 		//Run the game play logic for each player
-		//Iterate through player map
 		playGame();
 		
-		//handle dealer game play
-		
-//		for(each player in player[]) {
-//			//Check to see who won each game
-//			calculateWinner();
-//			
-//			//Reset all of the players hands to empty
-//			playerMap.get(i).resetHand();
-//		}
+		//Calculate Winners
+		 calculateWinners();
+		 
 	}
 	
 	
 	private void playGame() {
 		
-		for(int i=playerMap.size()-1;i>0;i--) {
+		for(int i=playerMap.size()-1;i>=0;i--) {
 				
-			while(true) {
-				//If the player isn't showing all of their cards then show them all
-				ui.display(playerMap.get(i).getUserName() + messages.returnMessage("youHaveBeenDealt") + playerMap.get(i).listOfCardLabelsInHand(), false);
-				
-				//Show the dealers first card
-				ui.display(messages.returnMessage("dealersFirstCard") + playerMap.get(0).dealersFirstCard() , false);
-				
-				//Prompt player to select an action
-				String playerInput = ui.display(messages.returnMessage("playerGameChoice"), true);
-				
-				if(playerInput.equalsIgnoreCase("raise")) {
+			if(i == 0) {
+				while(playerMap.get(0).handValue() < 17) {
+					playerMap.get(0).drawCard(deck.dealCard());
+				}
+			} else {
+			
+				while(true) {
+					//If the player isn't showing all of their cards then show them all
+					ui.display(playerMap.get(i).getUserName() + messages.returnMessage("youHaveBeenDealt") + playerMap.get(i).listOfCardLabelsInHand(), false);
 					
-					//Display the account information for the current player
-					ui.display(messages.returnMessage("bankBalance") + playerMap.get(i).getAccountInfo() + " chips.", false);
+					//Show the dealers first card
+					ui.display(messages.returnMessage("dealersFirstCard") + playerMap.get(0).dealersFirstCard() , false);
 					
-					//Send message with account balance and save the amount the player would like top bet
-					int amountToIncreaseBet = Integer.parseInt(ui.display(messages.returnMessage("betAmount"), true));
+					//Prompt player to select an action
+					String playerInput = ui.display(messages.returnMessage("playerGameChoice"), true);
 					
-					//If the amount they would like to bet is more than they have then display an error
-					if(amountToIncreaseBet > playerMap.get(i).getAccountInfo()) {
-						ui.display(messages.returnMessage("notEnoughFunds"), false);
-					} else {
+					if(playerInput.equalsIgnoreCase("raise")) {
 						
-						//Increase the bet amount
-						playerMap.get(i).increaseBet(amountToIncreaseBet);
-						
-						//Display current account balance
+						//Display the account information for the current player
 						ui.display(messages.returnMessage("bankBalance") + playerMap.get(i).getAccountInfo() + " chips.", false);
 						
-						//Display current pot balance
-						ui.display(messages.returnMessage("currentValueOfPot") + playerMap.get(i).valueOfPot(), false);
+						//Send message with account balance and save the amount the player would like top bet
+						int amountToIncreaseBet = Integer.parseInt(ui.display(messages.returnMessage("betAmount"), true));
+						
+						//If the amount they would like to bet is more than they have then display an error
+						if(amountToIncreaseBet > playerMap.get(i).getAccountInfo()) {
+							
+							ui.display(messages.returnMessage("notEnoughFunds"), false);
+						} else {
+							
+							//Increase the bet amount
+							playerMap.get(i).increaseBet(amountToIncreaseBet);
+							
+							//Display current account balance
+							ui.display(messages.returnMessage("bankBalance") + playerMap.get(i).getAccountInfo() + " chips.", false);
+							
+							//Display current pot balance
+							ui.display(messages.returnMessage("currentValueOfPot") + playerMap.get(i).valueOfPot(), false);
+						}
+						
+					} else if(playerInput.equalsIgnoreCase("hit")) {
+						
+						//Player is dealt another card
+						playerMap.get(i).drawCard(deck.dealCard());
+						
+					} else if(playerInput.equalsIgnoreCase("stay")) {
+						
+						break;
+					} else {
+						
+						ui.display(messages.returnMessage("errorInputNotFound"), false);
 					}
 					
-				} else if(playerInput.equalsIgnoreCase("hit")) {
-					
-					//Player is dealt another card
-					playerMap.get(i).drawCard(deck.dealCard());
-					
-				} else if(playerInput.equalsIgnoreCase("stay")) {
-					break;
-				} else {
-					ui.display(messages.returnMessage("errorInputNotFound"), false);
+					//Check for Bust
+					if(playerMap.get(i).handValue() > 21) {
+						ui.display(playerMap.get(i).getUserName() + messages.returnMessage("youHaveBeenDealt") + playerMap.get(i).listOfCardLabelsInHand(), false);
+						ui.display(messages.returnMessage("bust"), false);
+						break;
+					}
 				}
-				//Check for Bust
 			}
 		}
 	}
 	
-	
-	private void calculateWinner(int playerNum) {
+	private void calculateWinners() {
 		
-		int winner = -1;
-		
-		//Compare player points to the dealer points
-		if(player[playerNum].handValue() > player[dealerNum].handValue()) {
-			winner = playerNum;
-		} else if(player[playerNum].handValue() < player[dealerNum].handValue()) {
-			winner = dealerNum;
-		}
-		
-		
-		//Transfer the value of the pot to the winner
-		
-		
-		transferPotToWinner();
-		
-		//Return cards to deck
-		returnCardsToDeck();
-		
-		//Allow player the option to exit the game
-		if(exit) {
-			exit();
-		}else if(continue) {
-			startGame();
-		} else {
-			error();
+		for(int i=playerMap.size()-1;i>0;i--) {
+			
+			int playerHandValue = playerMap.get(i).handValue();
+			int dealerHandValue = playerMap.get(0).handValue();
+			
+			//Compare player points to the dealer points
+			if(playerHandValue < 22 && playerHandValue == dealerHandValue) {
+				
+				displayEndingHands(i);
+				playerMap.get(i).collectWinnings("tie");
+				ui.display(messages.returnMessage("tie"), false);
+			} else if((playerHandValue < 22 && playerHandValue > dealerHandValue) || (playerHandValue < 22 && dealerHandValue > 21)) {
+				
+				ui.display(messages.returnMessage("youWon") + playerMap.get(i).valueOfPot() + " chips!", false);
+				displayEndingHands(i);
+				playerMap.get(i).collectWinnings("win");
+				ui.display(messages.returnMessage("win"), false);
+			} else {
+				
+				displayEndingHands(i);
+				playerMap.get(0).collectWinnings("lost");
+				ui.display(messages.returnMessage("lost"), false);
+			}
 		}
 
+		//Return cards to deck
+		returnCardsToDeck();
+
+		//Allow player the option to exit the game
+		String playerInput = ui.display(messages.returnMessage("exitOption"), true);
+		while(true) {
+			if(playerInput.equalsIgnoreCase("exit")) {
+				System.exit(0);
+			} else if(playerInput.equalsIgnoreCase("continue")) {
+				startGame();
+			} else {
+				ui.display(messages.returnMessage("errorInputNotFound"), false);
+			}
+		}
 	}
 	
 	private void addNewPlayer() {
@@ -214,4 +237,53 @@ public class Blackjack {
 		playerMap.put(numOfPlayers, newPlayer);
 		
 	}
+	
+	public void returnCardsToDeck() {
+		
+		//Iterate through all players
+		for(int i=playerMap.size()-1;i>=0;i--) {
+			
+			//Check the number of cards a player has
+			int playersCards = playerMap.get(i).numOfCardsInHand();
+
+			//Iterate through the players cards
+			for(int c=playersCards; c>0;c--) {
+				
+				//Return cards to the deck
+				deck.addCardToDeck(playerMap.get(i).returnHandToDeck());
+			}
+		}
+		
+	}
+	
+	public void displayEndingHands(int playerNum) {
+		
+		//display the dealers hand
+		ui.display(playerMap.get(0).getUserName() + messages.returnMessage("dealerHasBeenDealt") + playerMap.get(0).listOfCardLabelsInHand(), false);
+		
+		//display the players hand
+		ui.display(playerMap.get(playerNum).getUserName() + messages.returnMessage("youHaveBeenDealt") + playerMap.get(playerNum).listOfCardLabelsInHand(), false);
+		
+		//display the players account balance
+		ui.display(messages.returnMessage("bankBalance") + playerMap.get(playerNum).getAccountInfo() + " chips.", false);
+		
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

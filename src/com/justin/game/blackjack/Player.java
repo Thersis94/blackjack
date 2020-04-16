@@ -52,12 +52,21 @@ public class Player {
 	}
 	
 	
-	public void collectWinnings() {
+	public void collectWinnings(String winOrTie) {
 		
-		//transfer chips from pot to the players account
-		
+		//Check for win or tie
+		if(winOrTie.equalsIgnoreCase("win")) {
+			int payout = pot.playerWon();
+			//Add winnings to account
+			account += payout;
+		} else if (winOrTie.equalsIgnoreCase("tie")) {
+			int payout = pot.playerTied();
+			//Add winnings to account
+			account += payout;
+		} else {
+			pot.playerLost();
+		}
 	}
-	
 	
 	public void resetHand() {
 		
@@ -72,12 +81,6 @@ public class Player {
 		hand.addCardToHand(newCard);
 	}
 	
-	public boolean checkForBust() {
-		
-		//check to see if the players had is over 21 and return a boolean
-
-		return
-	}
 	
 	/**
 	 * Returns the highest possible value without going over 21 of the hand object
@@ -107,6 +110,10 @@ public class Player {
 	
 	public int valueOfPot() {
 		return pot.totalChips;
+	}
+	
+	public Card returnHandToDeck() {
+		return hand.returnCard();
 	}
 	
 }

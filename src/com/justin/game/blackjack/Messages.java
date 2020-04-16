@@ -28,6 +28,7 @@ public class Messages {
 		messages.put("newPlayerOption", "Would you like to add another player to the game? 'yes' or 'no'.");
 		messages.put("newPlayer", "Please enter your name");
 		messages.put("youHaveBeenDealt", " you have been dealt a ");
+		messages.put("dealerHasBeenDealt", " has been dealt ");
 		messages.put("dealersFirstCard", "The dealer is showing a ");
 		messages.put("playerGameChoice", "Would you like to 'raise', 'hit' or 'stay'?");
 		messages.put("errorInputNotFound", "I'm sorry but we have no options that match your input. Please try again.");
@@ -35,6 +36,12 @@ public class Messages {
 		messages.put("betAmount", "How much would you like to bet?");
 		messages.put("notEnoughFunds", "You do not have enough chips to place that bet.");
 		messages.put("currentValueOfPot", "The current value of the pot is now ");
+		messages.put("bust", "Bust!");
+		messages.put("exitOption", "Type 'continue' to continue playing or type 'exit' to quit.");
+		messages.put("tie", "That is a push.");
+		messages.put("win", "You won!");
+		messages.put("lost", "You lost!");
+		messages.put("youWon", "You won ");
 	}
 	
 	/**
