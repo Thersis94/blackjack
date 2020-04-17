@@ -225,6 +225,8 @@ public class Blackjack {
 
 		// Iterate through the players
 		for (int i = playerMap.size() - 1; i > 0; i--) {
+			
+			ui.display(messages.returnMessage("bracket"), false);
 
 			int playerHandValue = playerMap.get(i).handValue();// Current players hand value
 			int dealerHandValue = playerMap.get(0).handValue();// The dealers hand value
