@@ -44,8 +44,9 @@ public class UserInterface {
 	 */
 	private String collectUserInput() {
 		//Run user input method. Scanner Class will return a string. Parse it as an integer where needed
-		Scanner userInput = new Scanner(System.in);
-		String inputLine = userInput.nextLine();
-		return inputLine;
+		try (Scanner userInput = new Scanner(System.in)) {
+			String inputLine = userInput.nextLine();
+			return inputLine;
+		}
 	}
 }

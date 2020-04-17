@@ -11,7 +11,7 @@ package com.justin.game.blackjack;
  * @since Apr 14, 2020
  * @updates:
  ****************************************************************************/
-public class Player {
+public class PlayerVO {
 	
 	private int account = 100;
 	private String userName;
@@ -42,7 +42,10 @@ public class Player {
 		return account;
 	}
 	
-	
+	/**
+	 * Method for increasing the value of the pot object
+	 * @param recieves a integer with the value to increase the pot by
+	 */
 	public void increaseBet(int amountToBet) {
 		
 		//remove chips from account
@@ -51,8 +54,11 @@ public class Player {
 		pot.increaseTotal(amountToBet);
 	}
 	
-	
-	public void collectWinnings(String winOrTie) {
+	/**
+	 * Method for handling the win/loss/tie of a game
+	 * @param recieves either win loss or tie as a String
+	 */
+	public void handlePot(String winOrTie) {
 		
 		//Check for win or tie
 		if(winOrTie.equalsIgnoreCase("win")) {
@@ -68,13 +74,10 @@ public class Player {
 		}
 	}
 	
-	public void resetHand() {
-		
-		//empty the players hand... either transfer back to the deck or remove completely if we are regenerating a new deck from scratch each round
-		
-	}
-	
-	
+	/**
+	 * Method for receiving a Card object and adding it to the hand object
+	 * @param recieves the Card object to add to the hand
+	 */
 	public void drawCard(Card newCard) {
 		
 		//draw another card from the deck
@@ -92,26 +95,44 @@ public class Player {
 		return hand.handValue();
 	}
 	
-	
+	/**
+	 * Method for returning a integer representing the number of cards in a players hand
+	 * @return
+	 */
 	public int numOfCardsInHand() {
 		
 		//Return the number of cards in the stored in the hand object
 		return hand.numOfCardsInHand();
 	}
 	
-	
+	/**
+	 * Method for displaying a String listing all of the card labels in a hand
+	 * @return A string listing all of the card labels in a hand
+	 */
 	public String listOfCardLabelsInHand() {
 		return hand.displayCards();
 	}
 	
-	public String dealersFirstCard() {
+	/**
+	 * Method for showing the first card in a hand object
+	 * @return a String with information on the first card in the hand object
+	 */
+	public String showFirstCardInHand() {
 		return hand.displayCard();
 	}
 	
+	/**
+	 * Method returning the value of the pot object as an integer
+	 * @return the value of the pot object as an integer
+	 */
 	public int valueOfPot() {
 		return pot.totalChips;
 	}
 	
+	/**
+	 * Method returning a card object from the hand object
+	 * @return card object from the hand object
+	 */
 	public Card returnHandToDeck() {
 		return hand.returnCard();
 	}

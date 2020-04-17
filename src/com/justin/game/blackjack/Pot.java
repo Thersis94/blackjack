@@ -15,7 +15,10 @@ public class Pot {
 	
 	int totalChips;
 	
-	
+	/**
+	 * Method for paying out the total number of chips to the winner of a round
+	 * @return the total number of chaps as a integer
+	 */
 	public int playerWon() {
 		
 		//Save the value of totalChips in pot
@@ -28,6 +31,10 @@ public class Pot {
 		return payout;
 	}
 	
+	/**
+	 * Method for returning the players bet to them if the round was a push
+	 * @return the number of chips the player bet as an integer
+	 */
 	public int playerTied() {
 		
 		//Split total in half
@@ -40,21 +47,29 @@ public class Pot {
 		return payout;
 	}
 	
+	/**
+	 * Method for reducing the pot to zero when the player loses
+	 */
 	public void playerLost() {
+		
 		totalChips = 0;
 	}
 	
-	
-	
+	/**
+	 * Method for increasing the the total pot value by the players bet
+	 * @param potIncrease is the total bet a player is placing as an integer
+	 */
 	public void increaseTotal(int potIncrease) {
 		
-		//Set totalChips to the original value plus the received value
+		//Set totalChips to the original value plus the received value multiplied by two for the dealers bet
 		totalChips = totalChips + (potIncrease*2);
 	}
 	
+	/**
+	 * Method for returning the total number of chips in the pot
+	 * @return the total number of chips in the pot as an integer
+	 */
 	public int totalPot() {
 		return totalChips;
 	}
-	
-	
 }

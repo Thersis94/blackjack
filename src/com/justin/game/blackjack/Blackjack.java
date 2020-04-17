@@ -16,7 +16,7 @@ import java.util.HashMap;
  ****************************************************************************/
 public class Blackjack {
 	
-	HashMap<Integer, Player> playerMap = new HashMap();
+	HashMap<Integer, PlayerVO> playerMap = new HashMap();
 	
 	private int numOfPlayers = 0;
 	private Messages messages = new Messages();
@@ -61,8 +61,8 @@ public class Blackjack {
 		messages.setGameMessages();
 
 		//Create player instance for Dealer
-		Player dealer = new Player();
-		dealer.setUserName("dealer");
+		PlayerVO dealer = new PlayerVO();
+		dealer.setUserName("Dealer");
 		playerMap.put(0, dealer);
 	}
 	
@@ -115,27 +115,36 @@ public class Blackjack {
 		 
 	}
 	
-	
+	/**
+	 * runs the game play sequence
+	 */
 	private void playGame() {
 		
+		//Iterate through players
 		for(int i=playerMap.size()-1;i>=0;i--) {
-				
+			
+			//Check to see if the current player is the dealer
 			if(i == 0) {
+				
+				//Force the dealer to hit until he has a minimum hand value of 17
 				while(playerMap.get(0).handValue() < 17) {
 					playerMap.get(0).drawCard(deck.dealCard());
 				}
 			} else {
 			
+				//Run loop while player is making play decisions
 				while(true) {
+					
 					//If the player isn't showing all of their cards then show them all
 					ui.display(playerMap.get(i).getUserName() + messages.returnMessage("youHaveBeenDealt") + playerMap.get(i).listOfCardLabelsInHand(), false);
 					
 					//Show the dealers first card
-					ui.display(messages.returnMessage("dealersFirstCard") + playerMap.get(0).dealersFirstCard() , false);
+					ui.display(messages.returnMessage("dealersFirstCard") + playerMap.get(0).showFirstCardInHand() , false);
 					
 					//Prompt player to select an action
 					String playerInput = ui.display(messages.returnMessage("playerGameChoice"), true);
 					
+					//Run if player selects 'raise'
 					if(playerInput.equalsIgnoreCase("raise")) {
 						
 						//Display the account information for the current player
@@ -160,11 +169,13 @@ public class Blackjack {
 							ui.display(messages.returnMessage("currentValueOfPot") + playerMap.get(i).valueOfPot(), false);
 						}
 						
+						//Run if player selects hit
 					} else if(playerInput.equalsIgnoreCase("hit")) {
 						
 						//Player is dealt another card
 						playerMap.get(i).drawCard(deck.dealCard());
 						
+						//If player selects stay break the loop
 					} else if(playerInput.equalsIgnoreCase("stay")) {
 						
 						break;
@@ -184,29 +195,40 @@ public class Blackjack {
 		}
 	}
 	
+	/**
+	 * Logic that iterates through the player list and compares player hand values to the dealer and determines the winner
+	 */
 	private void calculateWinners() {
 		
+		//Iterate through the players
 		for(int i=playerMap.size()-1;i>0;i--) {
 			
-			int playerHandValue = playerMap.get(i).handValue();
-			int dealerHandValue = playerMap.get(0).handValue();
+			int playerHandValue = playerMap.get(i).handValue();//Current players hand value
+			int dealerHandValue = playerMap.get(0).handValue();//The dealers hand value
 			
-			//Compare player points to the dealer points
+			//If the players hand didn't bust and it is equal to the dealers hand then it is a push
 			if(playerHandValue < 22 && playerHandValue == dealerHandValue) {
 				
+				playerMap.get(i).handlePot("tie");
+				//Shows hands of the player and the dealer 
 				displayEndingHands(i);
-				playerMap.get(i).collectWinnings("tie");
 				ui.display(messages.returnMessage("tie"), false);
+				
+				//If the players hand did't bust and the players hand is greater than the dealers hand or the player didn't bust and the dealer did the player wins
 			} else if((playerHandValue < 22 && playerHandValue > dealerHandValue) || (playerHandValue < 22 && dealerHandValue > 21)) {
 				
 				ui.display(messages.returnMessage("youWon") + playerMap.get(i).valueOfPot() + " chips!", false);
+				playerMap.get(i).handlePot("win");
+				//Shows hands of the player and the dealer 
 				displayEndingHands(i);
-				playerMap.get(i).collectWinnings("win");
 				ui.display(messages.returnMessage("win"), false);
+				
+				//Else the player loses
 			} else {
 				
+				playerMap.get(0).handlePot("lost");
+				//Shows hands of the player and the dealer 
 				displayEndingHands(i);
-				playerMap.get(0).collectWinnings("lost");
 				ui.display(messages.returnMessage("lost"), false);
 			}
 		}
@@ -216,6 +238,8 @@ public class Blackjack {
 
 		//Allow player the option to exit the game
 		String playerInput = ui.display(messages.returnMessage("exitOption"), true);
+		
+		//Run loop till player inputs either a continue or exit command
 		while(true) {
 			if(playerInput.equalsIgnoreCase("exit")) {
 				System.exit(0);
@@ -227,17 +251,21 @@ public class Blackjack {
 		}
 	}
 	
+	/**
+	 * Adds a new player to the player map when run. Will prompt the user for a playerName for the new player map object
+	 */
 	private void addNewPlayer() {
 		
-		Player newPlayer = new Player();
-		String newPlayerName = ui.display(messages.returnMessage("newPlayer"), true);
-		newPlayer.setUserName(newPlayerName);
-		//add starting bet
-		numOfPlayers++;
-		playerMap.put(numOfPlayers, newPlayer);
-		
+		PlayerVO newPlayer = new PlayerVO();//Create new instance of the player object
+		String newPlayerName = ui.display(messages.returnMessage("newPlayer"), true);//Prompt user for new player name
+		newPlayer.setUserName(newPlayerName);//Set the selected playerName
+		numOfPlayers++;//Increase player count
+		playerMap.put(numOfPlayers, newPlayer);//Add the new Player object to the player object map
 	}
 	
+	/**
+	 * Iterate through all players and return their hands to the deck
+	 */
 	public void returnCardsToDeck() {
 		
 		//Iterate through all players
@@ -255,7 +283,11 @@ public class Blackjack {
 		}
 		
 	}
-	
+
+	/**
+	 * Method created to handle message delivery in the calculateWinner method to reduce repetition
+	 * @param recieves the current player number
+	 */
 	public void displayEndingHands(int playerNum) {
 		
 		//display the dealers hand

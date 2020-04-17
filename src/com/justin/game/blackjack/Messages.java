@@ -46,7 +46,6 @@ public class Messages {
 	
 	/**
 	 * Method used to abstract message HashMap.
-	 * 
 	 * @return string containing requested message as a string
 	 */
 	public String returnMessage(String requestedMessageName) {
