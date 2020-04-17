@@ -1,4 +1,4 @@
-package com.justin.game.blackjack;
+package com.justin.game.blackjack.data;
 /****************************************************************************
  * <b>Title</b>: Pot.java
  * <b>Project</b>: blackjack
@@ -11,7 +11,7 @@ package com.justin.game.blackjack;
  * @since Apr 15, 2020
  * @updates:
  ****************************************************************************/
-public class Pot {
+public class PotVO {
 	
 	int totalChips;
 	
@@ -51,7 +51,7 @@ public class Pot {
 	 * Method for reducing the pot to zero when the player loses
 	 */
 	public void playerLost() {
-		
+
 		totalChips = 0;
 	}
 	
