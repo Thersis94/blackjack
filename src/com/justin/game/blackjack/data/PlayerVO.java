@@ -1,5 +1,7 @@
 package com.justin.game.blackjack.data;
 
+import java.util.List;
+
 /****************************************************************************
  * <b>Title</b>: Player.java <b>Project</b>: CoinGameJava <b>Description: </b>
  * Player class is a class that will represent the instance of a player. It
@@ -12,142 +14,111 @@ package com.justin.game.blackjack.data;
  * @since Apr 14, 2020
  * @updates:
  ****************************************************************************/
-public class PlayerVO {
+public class PlayerVO extends PersonVO {
 
-	private int account = 100;
 	private String userName;
+	private String status = "waiting";
 	private HandVO hand = new HandVO();
-	private PotVO pot = new PotVO();
+	private AccountVO account = new AccountVO();
+	private boolean isDealer;
+	private List<Integer> handValues;
+	private int bestPossibleHand;
 
 	/**
-	 * Method to set a new players userName
-	 * 
-	 * @param newUserName
-	 */
-	public void setUserName(String newUserName) {
-		userName = newUserName;
-	}
-
-	/**
-	 * Method to return a players name
-	 * 
-	 * @return the players name as a string
+	 * @return the userName
 	 */
 	public String getUserName() {
 		return userName;
 	}
 
 	/**
-	 * Method to return a players account chip number
-	 * 
-	 * @return the number of chips a player has
+	 * @param userName the userName to set
 	 */
-	public int getAccountInfo() {
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	/**
+	 * @return the hand
+	 */
+	public HandVO getHand() {
+		return hand;
+	}
+
+	/**
+	 * @param hand the hand to set
+	 */
+	public void setHand(HandVO hand) {
+		this.hand = hand;
+	}
+
+	/**
+	 * @return the account
+	 */
+	public AccountVO getAccount() {
 		return account;
 	}
 
 	/**
-	 * Method for increasing the value of the pot object
-	 * 
-	 * @param recieves a integer with the value to increase the pot by
+	 * @param account the account to set
 	 */
-	public void increaseBet(int amountToBet) {
-
-		// remove chips from account
-		account = account - amountToBet;
-		// add chips to pot
-		pot.increaseTotal(amountToBet);
+	public void setAccount(AccountVO account) {
+		this.account = account;
 	}
 
 	/**
-	 * Method for handling the win/loss/tie of a game
-	 * 
-	 * @param recieves either win loss or tie as a String
+	 * @return the isDealer
 	 */
-	public void handlePot(String winOrTie) {
-
-		// Check for win or tie
-		if (winOrTie.equalsIgnoreCase("win")) {
-			int payout = pot.playerWon();
-			// Add winnings to account
-			account += payout;
-		} else if (winOrTie.equalsIgnoreCase("tie")) {
-			int payout = pot.playerTied();
-			// Add winnings to account
-			account += payout;
-		} else {
-			pot.playerLost();
-		}
+	public boolean isDealer() {
+		return isDealer;
 	}
 
 	/**
-	 * Method for receiving a Card object and adding it to the hand object
-	 * 
-	 * @param recieves the Card object to add to the hand
+	 * @param isDealer the isDealer to set
 	 */
-	public void drawCard(CardVO newCard) {
-
-		// draw another card from the deck
-		hand.addCardToHand(newCard);
+	public void setDealer(boolean isDealer) {
+		this.isDealer = isDealer;
 	}
 
 	/**
-	 * Returns the highest possible value without going over 21 of the hand object
-	 * 
-	 * @return value of hand object
+	 * @return the handValues
 	 */
-	public int handValue() {
-
-		// Return the value of current hand
-		return hand.handValue();
+	public List<Integer> getHandValues() {
+		return handValues;
 	}
 
 	/**
-	 * Method for returning a integer representing the number of cards in a players
-	 * hand
-	 * 
-	 * @return
+	 * @param handValues the handValues to set
 	 */
-	public int numOfCardsInHand() {
-
-		// Return the number of cards in the stored in the hand object
-		return hand.numOfCardsInHand();
+	public void setHandValues(List<Integer> handValues) {
+		this.handValues = handValues;
 	}
 
 	/**
-	 * Method for displaying a String listing all of the card labels in a hand
-	 * 
-	 * @return A string listing all of the card labels in a hand
+	 * @return the bestPossibleHand
 	 */
-	public String listOfCardLabelsInHand() {
-		return hand.displayCards();
+	public int getBestPossibleHand() {
+		return bestPossibleHand;
 	}
 
 	/**
-	 * Method for showing the first card in a hand object
-	 * 
-	 * @return a String with information on the first card in the hand object
+	 * @param bestPossibleHand the bestPossibleHand to set
 	 */
-	public String showFirstCardInHand() {
-		return hand.displayCard();
+	public void setBestPossibleHand(int bestPossibleHand) {
+		this.bestPossibleHand = bestPossibleHand;
 	}
-
-	/**
-	 * Method returning the value of the pot object as an integer
-	 * 
-	 * @return the value of the pot object as an integer
-	 */
-	public int valueOfPot() {
-		return pot.totalChips;
-	}
-
-	/**
-	 * Method returning a card object from the hand object
-	 * 
-	 * @return card object from the hand object
-	 */
-	public CardVO returnHandToDeck() {
-		return hand.returnCard();
-	}
-
 }

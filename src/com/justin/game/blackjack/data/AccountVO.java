@@ -1,17 +1,17 @@
 package com.justin.game.blackjack.data;
-
 /****************************************************************************
- * <b>Title</b>: Pot.java <b>Project</b>: blackjack <b>Description: </b> The pot
- * object is a class that represents the current value of a players bets.
- * <b>Copyright:</b> Copyright (c) 2020 <b>Company:</b> Silicon Mountain
- * Technologies
+ * <b>Title</b>: Account.java
+ * <b>Project</b>: blackjack
+ * <b>Description: </b> CHANGE ME!!
+ * <b>Copyright:</b> Copyright (c) 2020
+ * <b>Company:</b> Silicon Mountain Technologies
  * 
  * @author justinjeffrey
  * @version 3.0
- * @since Apr 15, 2020
+ * @since Apr 17, 2020
  * @updates:
  ****************************************************************************/
-public class PotVO {
+public class AccountVO {
 
 	private int chips;
 
@@ -28,5 +28,4 @@ public class PotVO {
 	public void setChips(int chips) {
 		this.chips = chips;
 	}
-
 }

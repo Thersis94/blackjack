@@ -54,6 +54,5 @@ public class MessagesVO {
 		// Pull requested message from the HashMap and return it
 		String requestedMessageContent = messages.get(requestedMessageName);
 		return requestedMessageContent;
-
 	}
 }
