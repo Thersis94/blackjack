@@ -36,23 +36,25 @@ public class PlayerManager {
 	 * check that they have enough funds, then return the value of the bet
 	 */
 	public int placeBet(DealerVO dealer) {
-		
+
 		int betAmount = 0;
-		
-		Object[] gameStateInfo = {player.getUserName(), player.getHand().toString(), dealer.getHand().toString() };
+
+		Object[] gameStateInfo = { player.getUserName(), player.getHand().toString(), dealer.getHand().toString() };
 
 		ui.display(messages.returnMessage("currentPlayerHand"), false, gameStateInfo);
-		
+
 		// get current balance and display
-		if(ui.display(messages.returnMessage("wouldYouLikeToBet"), true, player.getAccount().getChips()).equalsIgnoreCase("yes")) {
+		if (ui.display(messages.returnMessage("wouldYouLikeToBet"), true, player.getAccount().getChips())
+				.equalsIgnoreCase("yes")) {
 			// Ask the user how much they would like to bet
 			betAmount = Integer.parseInt(ui.display(messages.returnMessage("betAmount"), true));
 			// Validate that they have the funds in their account
-			if(betAmount > player.getAccount().getChips()) {
+			if (betAmount > player.getAccount().getChips()) {
 				do {
 					// display message to user if they can't afford it
 					ui.display(messages.returnMessage("notEnoughFunds"), false);
-				} while(Integer.parseInt(ui.display(messages.returnMessage("betAmount"), true)) > player.getAccount().getChips());
+				} while (Integer.parseInt(ui.display(messages.returnMessage("betAmount"), true)) > player.getAccount()
+						.getChips());
 			} else {
 				// Reduce playerVO account balance by that amount and return to dealer for pot
 				int accountAfterBet = player.getAccount().getChips() - betAmount;
@@ -68,8 +70,8 @@ public class PlayerManager {
 	 * @return boolean representing the players response
 	 */
 	public boolean requestAnotherCard(DealerVO dealer) {
-		
-		Object[] gameStateInfo = {player.getUserName(), player.getHand().toString(), dealer.getHand().toString() };
+
+		Object[] gameStateInfo = { player.getUserName(), player.getHand().toString(), dealer.getHand().toString() };
 		ui.display(messages.returnMessage("currentPlayerHand"), false, gameStateInfo);
 
 		// prompt user for choice
@@ -108,9 +110,9 @@ public class PlayerManager {
 
 		// Set the players new hand
 		player.getHand().setHand(playersHand);
-		
+
 		// Check for a bust
-		if(player.getHand().getPossibleHandValues().size() == 0)
+		if (player.getHand().getPossibleHandValues().size() == 0)
 			player.setStatus("bust");
 	}
 
@@ -125,15 +127,15 @@ public class PlayerManager {
 		hand.clearHand();
 		return cards;
 	}
-	
+
 	public ArrayList<Integer> getPossibleValues() {
 		return player.getHand().getPossibleHandValues();
 	}
 
 	public void roundEndMessage(int winnings, DealerVO dealer) {
-		Object[] gameStateInfo = {player.getUserName(), player.getHand().toString(), dealer.getHand().toString() };
+		Object[] gameStateInfo = { player.getUserName(), player.getHand().toString(), dealer.getHand().toString() };
 		ui.display(messages.returnMessage("currentPlayerHand"), false, gameStateInfo);
-		switch(player.getStatus()) {
+		switch (player.getStatus()) {
 		case "won":
 			ui.display(messages.returnMessage("gameWon"), false, winnings);
 			break;
