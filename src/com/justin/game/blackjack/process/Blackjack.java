@@ -1,15 +1,13 @@
 package com.justin.game.blackjack.process;
 
+//Importing ArrayList from java.util for the players Array
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import com.justin.game.blackjack.data.CardVO;
 import com.justin.game.blackjack.data.DealerVO;
 import com.justin.game.blackjack.data.MessagesVO;
 import com.justin.game.blackjack.data.PlayerVO;
-import com.justin.game.blackjack.deckBuilders.StandardDeck;
-import com.justin.game.blackjack.managers.DealerPlayerManager;
+import com.justin.game.blackjack.deckBuilders.BlackjackDeck;
 import com.justin.game.blackjack.managers.Game21Manager;
 import com.justin.game.blackjack.managers.PlayerCreator;
 
@@ -27,11 +25,10 @@ import com.justin.game.blackjack.managers.PlayerCreator;
  ****************************************************************************/
 public class Blackjack {
 
-	private List<PlayerVO> players;
+	private ArrayList<PlayerVO> players = new ArrayList<>();
 	private DealerVO dealer = new DealerVO();
 	private MessagesVO messages = new MessagesVO();
 	UserInterface ui = new UserInterface();
-	private Game21Manager gm = new Game21Manager(players, dealer);
 
 	/**
 	 * Main method called to allow command line processing
@@ -68,22 +65,22 @@ public class Blackjack {
 
 		// Run messages setGameMessages method to setup game messages
 		messages.setGameMessages();
-		
-		//Create dealer
-		dealer.setUserName("dealer");
-		
-		//Get standard deck and give it to the dealer
-		StandardDeck standardDeck = new StandardDeck();
-		ArrayList<CardVO> deck = standardDeck.buildStandardDeck();
-		dealer.setDeck(deck);
-		players.add(dealer);
-		
+
 		// Add Players
-		while(UI.addNewPlayerMessage) {
+		while (ui.display(messages.returnMessage("newPlayerOption"), true).equalsIgnoreCase("yes")) {
 			PlayerCreator newPlayer = new PlayerCreator();
 			PlayerVO player = newPlayer.createNewPlayer();
 			players.add(player);
 		}
+
+		// Create dealer
+		dealer.setDealer(true);
+		dealer.setUserName("dealer");
+		// Get standard deck and give it to the dealer
+		BlackjackDeck blackjackDeck = new BlackjackDeck();
+		ArrayList<CardVO> deck = blackjackDeck.getDeck();
+		dealer.setDeck(deck);
+		players.add(dealer);
 	}
 
 	/**
@@ -91,18 +88,24 @@ public class Blackjack {
 	 */
 	private void startGame() {
 
-		while(UI.wouldYouLikeToPlayMessage) {
-		// Deal cards
-		gm.dealCards();
+		while (ui.display(messages.returnMessage("startANewRound"), true).equalsIgnoreCase("yes")) {
 
-		// Run the game play logic for each player
-		gm.playGame();
+			Game21Manager gm = new Game21Manager(players, dealer);
 
-		// Calculate Winners
-		gm.calculateWinners();
-		
-		//Players return their cards to the dealers deck
-		gm.returnHandsToDeck();
+			// Deal cards
+			gm.dealCards();
+
+			// Run the game play logic for each player
+			gm.playGame();
+
+			// Calculate Winners
+			gm.calculateWinners();
+
+			// Pay out Winners
+			gm.payOutWinners();
+
+			// Players return their cards to the dealers deck
+			gm.returnHandsToDeck();
 		}
 	}
 }

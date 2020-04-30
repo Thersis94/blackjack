@@ -1,7 +1,5 @@
 package com.justin.game.blackjack.data;
 
-import java.util.List;
-
 /****************************************************************************
  * <b>Title</b>: Player.java <b>Project</b>: CoinGameJava <b>Description: </b>
  * Player class is a class that will represent the instance of a player. It
@@ -21,8 +19,6 @@ public class PlayerVO extends PersonVO {
 	private HandVO hand = new HandVO();
 	private AccountVO account = new AccountVO();
 	private boolean isDealer;
-	private List<Integer> handValues;
-	private int bestPossibleHand;
 
 	/**
 	 * @return the userName
@@ -92,33 +88,5 @@ public class PlayerVO extends PersonVO {
 	 */
 	public void setDealer(boolean isDealer) {
 		this.isDealer = isDealer;
-	}
-
-	/**
-	 * @return the handValues
-	 */
-	public List<Integer> getHandValues() {
-		return handValues;
-	}
-
-	/**
-	 * @param handValues the handValues to set
-	 */
-	public void setHandValues(List<Integer> handValues) {
-		this.handValues = handValues;
-	}
-
-	/**
-	 * @return the bestPossibleHand
-	 */
-	public int getBestPossibleHand() {
-		return bestPossibleHand;
-	}
-
-	/**
-	 * @param bestPossibleHand the bestPossibleHand to set
-	 */
-	public void setBestPossibleHand(int bestPossibleHand) {
-		this.bestPossibleHand = bestPossibleHand;
 	}
 }

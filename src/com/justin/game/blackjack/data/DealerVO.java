@@ -1,13 +1,13 @@
 package com.justin.game.blackjack.data;
 
+//Importing ArrayList from java.util for the deck Array
 import java.util.ArrayList;
 
 /****************************************************************************
- * <b>Title</b>: Dealer.java
- * <b>Project</b>: blackjack
- * <b>Description: </b> CHANGE ME!!
- * <b>Copyright:</b> Copyright (c) 2020
- * <b>Company:</b> Silicon Mountain Technologies
+ * <b>Title</b>: Dealer.java <b>Project</b>: blackjack <b>Description: </b> The
+ * DealerVO is a object that is used to store and interact with the dealers deck
+ * object<b>Copyright:</b> Copyright (c) 2020 <b>Company:</b> Silicon Mountain
+ * Technologies
  * 
  * @author justinjeffrey
  * @version 3.0
@@ -31,5 +31,4 @@ public class DealerVO extends PlayerVO {
 	public void setDeck(ArrayList<CardVO> deck) {
 		this.deck = deck;
 	}
-	
 }

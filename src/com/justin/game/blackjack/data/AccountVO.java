@@ -1,10 +1,9 @@
 package com.justin.game.blackjack.data;
+
 /****************************************************************************
- * <b>Title</b>: Account.java
- * <b>Project</b>: blackjack
- * <b>Description: </b> CHANGE ME!!
- * <b>Copyright:</b> Copyright (c) 2020
- * <b>Company:</b> Silicon Mountain Technologies
+ * <b>Title</b>: Account.java <b>Project</b>: blackjack <b>Description: </b>
+ * AccountVO is a object used for storing the current number of chips in a players account <b>Copyright:</b> Copyright (c) 2020 <b>Company:</b> Silicon
+ * Mountain Technologies
  * 
  * @author justinjeffrey
  * @version 3.0
@@ -13,7 +12,7 @@ package com.justin.game.blackjack.data;
  ****************************************************************************/
 public class AccountVO {
 
-	private int chips;
+	private int chips = 100;
 
 	/**
 	 * @return the chips

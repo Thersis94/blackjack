@@ -1,5 +1,6 @@
 package com.justin.game.blackjack.process;
 
+//Importing Scanner from java.util in order to handle user console input
 import java.util.Scanner;
 
 /****************************************************************************
@@ -36,9 +37,12 @@ public class UserInterface {
 	 * @return If userInputRequest is true this will return the values entered by
 	 *         the user
 	 */
-	public String display(String message, boolean userInputRequest) {
+	public String display(String message, boolean userInputRequest, Object... templateLiterals) {
+
+		System.out.println("\n------------------------------------------------------------------------------\n");
+
 		// Display message to user
-		System.out.println(message);
+		System.out.printf(message, templateLiterals);
 
 		// If user input is requested then run collectUserInput
 		if (userInputRequest) {
